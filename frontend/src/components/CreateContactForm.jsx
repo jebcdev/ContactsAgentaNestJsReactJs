@@ -1,0 +1,100 @@
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom"
+import { ContactsContext } from "../contexts/ContactsContext.jsx";
+
+export const CreateContactForm = () => {
+    const { error, createContact,  } = useContext(ContactsContext)
+
+    const [newContact, setNewContact] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+    })
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setNewContact({
+            ...newContact,
+            [id]: value
+        })
+    }
+
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        createContact(newContact);
+
+        if (error) return alert("Error in creating contact")
+        setNewContact({
+            name: "",
+            email: "",
+            phone: "",
+            address: "",
+            city: "",
+        });
+
+        if (!confirm("Contact Created Successfully.\n Create More Contacts?")) {
+            navigate("/");
+        }
+    }
+
+    
+
+
+    return (
+        <>
+
+            <form onSubmit={(e) => handleSubmit(e)}>
+                {/* Name */}
+                <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Name</label>
+                    <input type="text" className="form-control" id="name" value={newContact.name} onChange={(e) => handleChange(e)} required />
+                </div>
+                {/* Name */}
+
+                {/* Email and Phone */}
+                <div className="row">
+                    <div className="col-6 mb-3">
+                        <label htmlFor="email" className="form-label">Email</label>
+                        <input type="email" className="form-control" id="email" value={newContact.email} onChange={(e) => handleChange(e)} required />
+                    </div>
+
+                    <div className="col-6 mb-3">
+                        <label htmlFor="phone" className="form-label">Phone</label>
+                        <input type="phone" className="form-control" id="phone" value={newContact.phone} onChange={(e) => handleChange(e)} required />
+                    </div>
+                </div>
+                {/* Email and Phone */}
+
+                {/* Address and City */}
+                <div className="row">
+                    <div className="col-6 mb-3">
+                        <label htmlFor="address" className="form-label">Address</label>
+                        <input type="address" className="form-control" id="address" value={newContact.address} onChange={(e) => handleChange(e)} required />
+                    </div>
+
+                    <div className="col-6 mb-3">
+                        <label htmlFor="city" className="form-label">City</label>
+                        <input type="city" className="form-control" id="city" value={newContact.city} onChange={(e) => handleChange(e)} required />
+                    </div>
+                </div>
+                {/* Address and City */}
+
+
+                {/* Buttons */}
+                <div className="row text-center">
+                    <div className="col-6">
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                    </div>
+                    <div className="col-6">
+                        <Link to="/" className="btn btn-secondary">Cancel</Link>
+                    </div>
+                </div>
+                {/* Buttons */}
+            </form>
+        </>
+    )
+}
